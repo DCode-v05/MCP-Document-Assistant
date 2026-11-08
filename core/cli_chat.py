@@ -96,7 +96,6 @@ def convert_prompt_message_to_message_param(
 
     content = prompt_message.content
 
-    # Check if content is a dict-like object with a "type" field
     if isinstance(content, dict) or hasattr(content, "__dict__"):
         content_type = (
             content.get("type", None)
@@ -114,7 +113,6 @@ def convert_prompt_message_to_message_param(
     if isinstance(content, list):
         text_blocks = []
         for item in content:
-            # Check if item is a dict-like object with a "type" field
             if isinstance(item, dict) or hasattr(item, "__dict__"):
                 item_type = (
                     item.get("type", None)

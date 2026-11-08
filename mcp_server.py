@@ -12,33 +12,28 @@ docs = {
     "spec.txt": "These specifications define the technical requirements for the equipment.",
 }
 
-# Tool to read a document
 @mcp.tool(name="read_doc", description="Reads the contents of a document and return it as a string.")
 def read_doc(doc_id: str=Field(description="Id of the document to read")) -> str:
     if doc_id not in docs:
         raise ValueError(f"Document with id '{doc_id}' not found.")
     return docs[doc_id]
 
-# Tool to edit a document
 @mcp.tool(name="edit_doc", description="Edits the contents of a document.")
 def edit_doc(doc_id: str=Field(description="Id of the document to edit"), old_str: str=Field(description="String to be replaced"), new_str: str=Field(description="String to replace with")):
     if doc_id not in docs:
         raise ValueError(f"Document with id '{doc_id}' not found.")
     docs[doc_id] = docs[doc_id].replace(old_str, new_str)
 
-# Resource to list all document ids
 @mcp.resource("docs://documents", mime_type="application/json", description="Returns a list of all document ids.")
 def list_docs() -> list[str]:
     return list(docs.keys())
 
-# Resource to get a particular document's contents
 @mcp.resource("docs://document/{doc_id}", mime_type="text/plain", description="Returns the contents of a particular document.")
 def get_doc(doc_id: str) -> str:
     if doc_id not in docs:
         raise ValueError(f"Document with id '{doc_id}' not found.")
     return docs[doc_id]
 
-# Prompt to rewrite a document in markdown format
 @mcp.prompt(name="format_doc", description="Rewrite a document in markdown format.")
 def format_doc(doc_id: str=Field(description="Id of the document to rewrite")) -> list[base.Message]:
     prompt = f"""
@@ -54,7 +49,6 @@ def format_doc(doc_id: str=Field(description="Id of the document to rewrite")) -
     """
     return [base.UserMessage(prompt)]
 
-# Prompt to summarize a document
 @mcp.prompt(name="summarize_doc", description="Summarize the contents of a document.")
 def summarize_doc(doc_id: str=Field(description="Id of the document to summarize")) -> list[base.Message]:
     prompt = f"""
